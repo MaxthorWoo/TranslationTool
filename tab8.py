@@ -270,7 +270,7 @@ def tab8_content():
         with col3:
             token = st.text_input("Token", value="1234567890", key="tab8_token")
         with col4:
-            coze_api = st.text_input("工作流 API", value="7582900707377446975", key="tab8_coze_api")
+            coze_api = st.text_input("工作流 API（默认不改）", value="7582900707377446975", key="tab8_coze_api")
 
         st.subheader("翻译参数")
         col1, col2 = st.columns(2)
@@ -502,5 +502,6 @@ def tab8_content():
 
         # 显示自动化循环次数
         st.info(f"已执行循环次数: {st.session_state.auto_loop_count}")
+
 
 
