@@ -268,7 +268,7 @@ def tab8_content():
         with col2:
             threshold = st.number_input("停止阈值（待翻译字段数≤此值时停止）", min_value=1, max_value=500, value=50, step=10, key="tab8_threshold")
         with col3:
-            token = st.text_input("Token", value="", key="tab8_token")
+            token = st.text_input("Token", value="1234567890", key="tab8_token")
         with col4:
             coze_api = st.text_input("工作流 API", value="7582900707377446975", key="tab8_coze_api")
 
@@ -502,4 +502,5 @@ def tab8_content():
 
         # 显示自动化循环次数
         st.info(f"已执行循环次数: {st.session_state.auto_loop_count}")
+
 
