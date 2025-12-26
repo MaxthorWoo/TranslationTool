@@ -25,7 +25,7 @@ col1, col2 = st.columns([8, 1])
 col1.title("本地化工作流辅助工具")
 col2.markdown("<small>Version 4.0</small>", unsafe_allow_html=True)
 
-TAB_NAMES = ["长度检查", "批量上传", "合并文件", "拆分文件", "整合工作台", "Coze 测试", "工作流测试", "自动化迭代", "DGame 格式整理"]
+TAB_NAMES = ["长度检查", "合并文件", "拆分文件", "整合工作台", "Coze 测试", "工作流测试", "自动化迭代", "DGame 格式整理"]
 
 # 在 session_state 中初始化当前选中的标签
 if 'current_tab' not in st.session_state:
@@ -50,8 +50,6 @@ st.sidebar.info(f"当前页面: **{st.session_state.current_tab}**")
 # 根据选中的标签显示内容
 if st.session_state.current_tab == "长度检查":
     tab1_content()
-elif st.session_state.current_tab == "批量上传":
-    tab2_content()
 elif st.session_state.current_tab == "合并文件":
     tab3_content()
 elif st.session_state.current_tab == "拆分文件":
