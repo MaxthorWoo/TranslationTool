@@ -31,22 +31,35 @@ def tab2_content():
     # 分批数量
     split_count = st.number_input("分成几批？", min_value=1, value=1, step=1, key="tab2_split_count")
 
-    # 定义上传函数 (修改后的版本)
     def upload_file(file):
         try:
-            # 使用requests库直接发送文件数据
+            # 1. 设置一个模拟浏览器的请求头
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            }
+            
+            # 2. 将自定义headers添加到请求中
             files = {'file': (file.name, file.getvalue())}
-            response = requests.post("https://0x0.st", files=files)
+            response = requests.post("https://0x0.st", files=files, headers=headers)
+            
             url = response.text.strip()
             
-            # 检查响应是否为有效的URL
-            if response.status_code == 200 and url.startswith("https://"):
-                return url
+            # 3. 更详细的错误处理
+            if response.status_code == 200:
+                # 成功响应，但也要检查返回内容是否像URL
+                if url.startswith("https://") or url.startswith("http://"):
+                    return url
+                else:
+                    # 服务器可能返回了错误信息文本
+                    return f"服务器返回非URL内容: {url}"
             else:
-                # 返回错误信息
-                return f"HTTP {response.status_code}: {url}"
+                # HTTP状态码错误
+                return f"HTTP {response.status_code}: {url if url else response.reason}"
+                
+        except requests.exceptions.RequestException as e:
+            return f"网络请求失败: {str(e)}"
         except Exception as e:
-            return f"请求异常: {str(e)}"
+            return f"处理文件时出错: {str(e)}"
 
     # 开始上传按钮
     if st.button("开始上传") and uploaded_files:
@@ -125,3 +138,4 @@ def tab2_content():
             height=min(len(st.session_state.success_links)*60, 800)
 
         )
+
