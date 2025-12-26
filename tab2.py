@@ -4,6 +4,7 @@ import json, io, zipfile, time, subprocess, tempfile, os
 from datetime import datetime
 from collections import OrderedDict
 from st_aggrid import AgGrid, GridOptionsBuilder, JsCode, GridUpdateMode, DataReturnMode
+import requests
 
 def tab2_content():
     st.header("批量上传到 0x0.st")
@@ -30,21 +31,22 @@ def tab2_content():
     # 分批数量
     split_count = st.number_input("分成几批？", min_value=1, value=1, step=1, key="tab2_split_count")
 
-    # 定义上传函数
+    # 定义上传函数 (修改后的版本)
     def upload_file(file):
-        tmp = tempfile.NamedTemporaryFile(delete=False)
-        tmp.write(file.getbuffer())
-        tmp.flush()
-        tmp.close()
         try:
-            result = subprocess.run(
-                ["curl", "-s", "-F", f"file=@{tmp.name}", "https://0x0.st"],
-                capture_output=True, text=True
-            )
-            url = result.stdout.strip()
-            return url
-        finally:
-            os.unlink(tmp.name)
+            # 使用requests库直接发送文件数据
+            files = {'file': (file.name, file.getvalue())}
+            response = requests.post("https://0x0.st", files=files)
+            url = response.text.strip()
+            
+            # 检查响应是否为有效的URL
+            if response.status_code == 200 and url.startswith("https://"):
+                return url
+            else:
+                # 返回错误信息
+                return f"HTTP {response.status_code}: {url}"
+        except Exception as e:
+            return f"请求异常: {str(e)}"
 
     # 开始上传按钮
     if st.button("开始上传") and uploaded_files:
@@ -121,4 +123,5 @@ def tab2_content():
             "全部链接预览",
             value=json.dumps(st.session_state.success_links, ensure_ascii=False, indent=4),
             height=min(len(st.session_state.success_links)*60, 800)
+
         )
