@@ -38,7 +38,7 @@ st.sidebar.markdown("---")
 # 为每个标签创建一个按钮
 for tab in TAB_NAMES:
     # 如果按钮被点击，更新当前选中的标签
-                if st.sidebar.button(tab, key=f"btn_{tab}", use_container_width=True):
+                if st.sidebar.button(tab, key=f"btn_{tab}", width=stretch):
                         st.session_state.current_tab = tab
 
 # 添加一些视觉分隔
@@ -64,3 +64,4 @@ elif st.session_state.current_tab == "自动化迭代":
     tab8_content()
 elif st.session_state.current_tab == "DGame 格式整理":
     tab9_content()
+
