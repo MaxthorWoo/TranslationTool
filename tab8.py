@@ -262,11 +262,15 @@ def tab8_content():
 
         # ---- 自动化参数 ----
         st.subheader("自动化参数")
-        col1, col2 = st.columns(2)
+        col1, col2, col3, col4 = st.columns(4)
         with col1:
             loop_interval = st.number_input("循环间隔（秒）", min_value=1, max_value=60, value=5, step=1, key="tab8_loop_interval")
         with col2:
             threshold = st.number_input("停止阈值（待翻译字段数≤此值时停止）", min_value=1, max_value=500, value=50, step=10, key="tab8_threshold")
+        with col3:
+            token = st.text_input("Token", value="", key="tab8_token")
+        with col4:
+            coze_api = st.text_input("工作流 API", value="7582900707377446975", key="tab8_coze_api")
 
         st.subheader("翻译参数")
         col1, col2 = st.columns(2)
@@ -282,8 +286,8 @@ def tab8_content():
             log_area = st.empty()
 
         # ---- 初始化 Workflow 客户端 ----
-        COZE_TOKEN = "pat_FloCmvnzkW3ZCUC9XZqqOos1csBAbEezqZo2NhtYNYD4Dw9JwlSQJ7yu77G6iJ5T"
-        WORKFLOW_ID = "7582900707377446975"
+        COZE_TOKEN = token
+        WORKFLOW_ID = coze_api
         coze_client = coze(auth=TokenAuth(token=COZE_TOKEN), base_url=COZE_CN_BASE_URL)
 
         # ---- 自动化核心逻辑 ----
@@ -498,3 +502,4 @@ def tab8_content():
 
         # 显示自动化循环次数
         st.info(f"已执行循环次数: {st.session_state.auto_loop_count}")
+
