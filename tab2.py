@@ -40,6 +40,7 @@ def tab2_content():
             
             # 2. 将自定义headers添加到请求中
             files = {'file': (file.name, file.getvalue())}
+            st.write(f"调试信息：状态码={response.status_code}, 响应头={response.headers}, 内容={response.text[:200]}")
             response = requests.post("https://0x0.st", files=files, headers=headers)
             
             url = response.text.strip()
@@ -138,4 +139,5 @@ def tab2_content():
             height=min(len(st.session_state.success_links)*60, 800)
 
         )
+
 
